@@ -11,9 +11,10 @@ const port = process.env.PORT || 3000;
 
 // ✅ CORS must go here before any route
 app.use(cors({
-  origin: "*", // or specify: ["https://preview--onedayin.lovable.app"]
+  origin: "https://preview--onedayin.lovable.app"
 }));
 
+// ✅ Needed to parse JSON request bodies
 app.use(bodyParser.json());
 
 const configuration = new Configuration({
