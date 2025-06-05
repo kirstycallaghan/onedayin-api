@@ -9,12 +9,22 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// ✅ CORS must go here before any route
+// ✅ Updated CORS setup to allow both preview and live domains
+const allowedOrigins = [
+  "https://preview--onedayin.lovable.app",
+  "https://onedayin.lovable.app"
+];
+
 app.use(cors({
-  origin: "https://preview--onedayin.lovable.app"
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
 }));
 
-// ✅ Needed to parse JSON request bodies
 app.use(bodyParser.json());
 
 const openai = new OpenAI({
@@ -25,13 +35,14 @@ app.post("/generate-itinerary", async (req, res) => {
   const { city, date, tripType } = req.body;
 
   try {
-const prompt = `
+    const prompt = `
 Generate a detailed one-day itinerary in ${city} for a ${tripType} trip on ${date}.
 Use Markdown formatting:
 - Make times and key venues **bold**
 - Use headings for Morning, Afternoon, Evening, Night
 - Use bullet points for activities within each section
 - add line break between each section
+- include how to travel between each location and how long that takes 
 - Link restaurants/venues so the user can click through a book a table
 `;
 
