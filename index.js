@@ -9,10 +9,11 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// ✅ Enable CORS for all domains (Lovable preview included)
+// ✅ CORS must go here before any route
 app.use(cors({
   origin: "*", // or specify: ["https://preview--onedayin.lovable.app"]
 }));
+
 app.use(bodyParser.json());
 
 const configuration = new Configuration({
