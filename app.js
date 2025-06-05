@@ -31,6 +31,8 @@ Use Markdown formatting:
 - Make times and key venues **bold**
 - Use headings for Morning, Afternoon, Evening, Night
 - Use bullet points for activities within each section
+- add line break between each section
+- Link restaurants/venues so the user can click through a book a table
 `;
 
     const response = await openai.chat.completions.create({
