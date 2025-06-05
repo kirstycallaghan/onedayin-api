@@ -25,7 +25,13 @@ app.post("/generate-itinerary", async (req, res) => {
   const { city, date, tripType } = req.body;
 
   try {
-    const prompt = `Generate a detailed one-day itinerary in ${city} for a ${tripType} trip on ${date}. Format it with headings for morning, afternoon, evening, and night.`;
+const prompt = `
+Generate a detailed one-day itinerary in ${city} for a ${tripType} trip on ${date}.
+Use Markdown formatting:
+- Make times and key venues **bold**
+- Use headings for Morning, Afternoon, Evening, Night
+- Use bullet points for activities within each section
+`;
 
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
