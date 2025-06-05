@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import { Configuration, OpenAIApi } from "openai";
 import dotenv from "dotenv";
+import OpenAI from "openai";
 
 dotenv.config();
 
@@ -17,10 +17,9 @@ app.use(cors({
 // ✅ Needed to parse JSON request bodies
 app.use(bodyParser.json());
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 app.post("/generate-itinerary", async (req, res) => {
   const { city, date, tripType } = req.body;
@@ -28,12 +27,12 @@ app.post("/generate-itinerary", async (req, res) => {
   try {
     const prompt = `Generate a detailed one-day itinerary in ${city} for a ${tripType} trip on ${date}. Format it with headings for morning, afternoon, evening, and night.`;
 
-    const response = await openai.createChatCompletion({
+    const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
     });
 
-    const itinerary = response.data.choices[0].message.content;
+    const itinerary = response.choices[0].message.content;
     res.json({ itinerary });
   } catch (err) {
     console.error("❌ Failed to generate itinerary:", err);
